@@ -1,0 +1,13 @@
+global_frame: odom
+rolling_window: true
+update_frequency: 1.0
+publish_frequency: 2.0
+rolling_window: true
+width: 10.0
+height: 10.0
+resolution: 0.05
+
+plugins:
+  #- {name: obstacles_laser,           type: "costmap_2d::VoxelLayer"}
+  - {name: laser_scan_sensor,           type: "costmap_2d::ObstacleLayer"}    
+  - {name: inflation,                 type: "costmap_2d::InflationLayer"}

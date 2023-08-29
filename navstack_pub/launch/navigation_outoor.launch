@@ -1,0 +1,31 @@
+<launch>
+
+    <!-- Run the map server -->
+    <include file="$(find navstack_pub)/launch/start_map_server.launch" />
+
+    
+    <!--- Run robot localization Base --> 
+    <rosparam command="load" file="$(find navstack_pub)/params/ekf_params.yaml" />
+    <rosparam command="load" file="$(find navstack_pub)/params/navsat_params.yaml" />
+        
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se_odom" clear_params="true"/>
+        <remap from="odometry/filtered" to="/r2d2_diff_drive_controller/odom_filtered"/>
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se_map" clear_params="true">
+        <remap from="odometry/filtered" to="odometry/filtered_map"/>
+    </node>
+
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen" >
+        <remap from="odometry/filtered" to="odometry/filtered_map"/>
+        <remap from="gps/fix" to="/gps/fix"/>
+        <remap from="imu/data_raw" to="/imu/data_raw"/>
+    </node>
+
+    <!-- Run navigation to start move_base -->
+    <include file="$(find navstack_pub)/launch/move_base_nav.launch" />
+
+
+    <!-- Run pointcloud2 to laserscan base -->
+    <include file="$(find pc2l)/launch/start_pc2l_velodyne.launch"/>
+
+
+</launch>

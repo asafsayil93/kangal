@@ -1,0 +1,24 @@
+footprint: [[-0.45, -0.3], [0.45, -0.3], [0.45, 0.3], [-0.45, 0.3]]
+footprint_padding: 0.01
+
+robot_base_frame: cashi
+update_frequency: 4.0
+publish_frequency: 3.0
+transform_tolerance: 0.5
+
+resolution: 0.05
+
+obstacle_range: 5.5
+raytrace_range: 6.0
+
+#layer definitions
+static:
+    map_topic: /map
+    subscribe_to_updates: true
+
+obstacles_laser:
+    observation_sources: velodyne
+
+    velodyne: {sensor_frame: velodyne, data_type: PointCloud2, topic: velodyne_points, marking: true, clearing: true,    min_obstacle_height: 0.30, obstacle_range: 25, raytrace_range: 25}
+inflation:
+    inflation_radius: 1.0

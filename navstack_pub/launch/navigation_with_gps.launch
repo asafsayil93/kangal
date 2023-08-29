@@ -1,0 +1,31 @@
+<launch>
+
+
+    <!--
+    haritalama da gerek yok.
+     
+    <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom 1" />
+    <node pkg="tf" type="static_transform_publisher" name="odom_to_cashi" args="0 0 0 0 0 0 odom cashi 1" />
+    <node pkg="tf" type="static_transform_publisher" name="gps_broadcaster" args="0 0.0 0.0 0 0 0 cashi gps_sensor_gps 30" />
+    <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom 30" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
+
+    !-->
+
+     <!-- Run the NAVSAT -->
+    <include file="$(find navstack_pub)/launch/start_navsat.launch" />
+
+    <!-- Run the ekf for map to odom config -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization_with_gps"> 
+        <rosparam command="load" file="$(find navstack_pub)/launch/robot_localization_with_gps.yaml" />
+    </node>
+
+    <!-- Run the map server -->
+    <include file="$(find navstack_pub)/launch/start_map_server.launch" />
+
+    <!--- Run Move Base -->
+    <include file="$(find navstack_pub)/launch/move_base_odom.launch" />
+    
+
+
+</launch>
